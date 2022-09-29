@@ -58,3 +58,21 @@ if gtype == graph_types[3]:
     fig = px.scatter(df, x=colx, y=coly)
 if fig:
     st.plotly_chart(fig, use_container_width=True)
+
+if st.sidebar.checkbox("categorical visualization"):
+    catx = st.sidebar.selectbox("select category column", categorical_cols)
+    numy = st.sidebar.selectbox("select numerical column", numerical_cols)
+    graph_types = ['box','funnel','funnel_area']
+    gtype = st.sidebar.multiselect("select a graph type", graph_types)
+    limit = st.slider("Select number of rows", min_value=100, max_value=df.shape[0])
+    dfc = df[:limit]
+    if graph_types[0] in gtype:
+        fig= px.box(dfc, x=catx, y=numy)
+        st.plotly_chart(fig, use_container_width=True)
+    if graph_types[1] in gtype:
+        fig = px.funnel(dfc, catx, numy)
+        st.plotly_chart(fig, use_container_width=True)
+    if graph_types[2] in gtype:
+        fig = px.funnel_area(dfc, catx, numy)
+        st.plotly_chart(fig, use_container_width=True)
+    
